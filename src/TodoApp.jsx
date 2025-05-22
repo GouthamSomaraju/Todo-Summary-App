@@ -1,3 +1,5 @@
+// src/TodoApp.jsx
+
 import React, { useEffect, useState } from "react";
 
 const TodoApp = () => {
@@ -6,7 +8,6 @@ const TodoApp = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Fetch todos from backend on first render
   useEffect(() => {
     fetch("http://localhost:5000/todos")
       .then((res) => res.json())
@@ -18,7 +19,6 @@ const TodoApp = () => {
     if (!input.trim()) return;
 
     if (editIndex !== null) {
-      // Local edit only – backend update would be needed if supported
       const updated = [...todos];
       updated[editIndex].text = input;
       setTodos(updated);
@@ -54,20 +54,21 @@ const TodoApp = () => {
     setEditIndex(index);
   };
 
-  const handleSendToSlack = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/summarize", {
-        method: "POST",
-      });
-      const data = await res.json();
-      setMessage(data.success ? "✅ Summary sent to Slack!" : "❌ Failed to send.");
-    } catch (err) {
-      console.error("Slack error:", err);
-      setMessage("❌ Error sending to Slack.");
-    }
+ const handleSendToSlack = async () => {
+  try {
+    const res = await fetch("http://localhost:5000/summarize", {
+      method: "POST",
+    });
+    const data = await res.json();
+    setMessage(data.success ? "✅ Summary sent to Slack!" : "❌ Failed to send.");
+  } catch (err) {
+    console.error("Slack error:", err);
+    setMessage("❌ Error sending to Slack.");
+  }
 
-    setTimeout(() => setMessage(null), 3000);
-  };
+  setTimeout(() => setMessage(null), 3000);
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-10 p-4 border rounded shadow">
