@@ -23,7 +23,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 const cohere = new CohereClient({
-  token: process.env.COHERE_API_KEY,
+  token: 'khEyHLCWjbjmbHmqJOsHZcuSXRDYKaL32DVZH9yO',
 });
 
 const app = express();
@@ -93,7 +93,7 @@ app.post('/summarize', async (req, res) => {
     const summary = response.text;
 
     // Post summary message to Slack webhook
-    await axios.post(process.env.SLACK_WEBHOOK_URL, {
+    await axios.post('https://hooks.slack.com/services/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', {
       text: `*📝 To-Do Summary from Backend:*\n${summary}`
     });
 
