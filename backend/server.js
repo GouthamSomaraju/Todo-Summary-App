@@ -6,6 +6,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { CohereClient } from 'cohere-ai';
 import axios from 'axios';
+console.log(path);
 
 dotenv.config(); // Load .env
 console.log('COHERE_API_KEY:', process.env.COHERE_API_KEY);
@@ -22,10 +23,14 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 const TODOS_COLLECTION = 'todos';
 
-const serviceAccountPath = path.join(__dirname, 'firebase-admin-key.json');
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.FIREBASE_ADMIN_KEY, 'base64').toString('utf8')
+);
+
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountPath),
+  credential: admin.credential.cert(serviceAccount),
 });
+
 const db = admin.firestore();
 
 // Cohere Client
